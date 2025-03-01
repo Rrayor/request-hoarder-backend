@@ -3,12 +3,14 @@
 use sea_orm::entity::prelude::*;
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq)]
-#[sea_orm(table_name = "project")]
+#[sea_orm(table_name = "request_header")]
 pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i32,
-    pub name: String,
-    pub description: Option<String>,
+    pub key: String,
+    #[sea_orm(column_type = "Text")]
+    pub value: String,
+    pub request_id: i32,
     pub created_at: DateTime,
     pub updated_at: DateTime,
     pub deleted_at: Option<DateTime>,
@@ -16,13 +18,19 @@ pub struct Model {
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
-    #[sea_orm(has_many = "super::group::Entity")]
-    Group,
+    #[sea_orm(
+        belongs_to = "super::request::Entity",
+        from = "Column::RequestId",
+        to = "super::request::Column::Id",
+        on_update = "Cascade",
+        on_delete = "Cascade"
+    )]
+    Request,
 }
 
-impl Related<super::group::Entity> for Entity {
+impl Related<super::request::Entity> for Entity {
     fn to() -> RelationDef {
-        Relation::Group.def()
+        Relation::Request.def()
     }
 }
 
