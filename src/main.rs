@@ -1,6 +1,6 @@
 use request_hoarder_backend::establish_connection;
 use tokio;
-use sea_orm::{Set};
+use sea_orm::{Set, ActiveModelTrait};
 use entity::project;
 
 #[tokio::main]
@@ -12,7 +12,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         ..Default::default()
     };
 
-    let project: project::Model = project.insert(&db).await?;
-    println!("{:?}", project);
+    let p: project::Model = project.insert(&db).await?;
+    println!("{:?}", p);
     Ok(())
 }

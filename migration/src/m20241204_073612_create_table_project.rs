@@ -34,7 +34,7 @@ impl MigrationTrait for Migration {
 }
 
 #[derive(DeriveIden)]
-enum Project {
+pub enum Project {
     Table,
     Id,
     Name,
